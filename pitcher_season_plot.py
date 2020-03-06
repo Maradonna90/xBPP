@@ -27,8 +27,9 @@ def main():
     print(flop_diff)
     s_data.loc[:, 'xbpp_pct'] = s_data.loc[:, 'xBPP'].rank(pct=True, ascending=False)
     print(s_data)
+    print(s_data.describe())
     players = ["Jordan Zimmermann", "Austin Adams", "Chris Bassitt"]
-    pct_plot(players[::-1], s_data, str(int(season)))
+    #pct_plot(players[::-1], s_data, str(int(season)))
 def pct_plot(players, s_data, title):
     current_palette = sns.color_palette('colorblind')
     dark_palette = sns.color_palette('deep')
