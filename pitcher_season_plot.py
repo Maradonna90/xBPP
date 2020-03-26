@@ -29,7 +29,7 @@ def main():
     print(s_data)
     print(s_data.describe())
     players = ["Jordan Zimmermann", "Austin Adams", "Chris Bassitt"]
-    #pct_plot(players[::-1], s_data, str(int(season)))
+    pct_plot(players[::-1], s_data, str(int(season)))
 def pct_plot(players, s_data, title):
     current_palette = sns.color_palette('colorblind')
     dark_palette = sns.color_palette('deep')
@@ -46,17 +46,19 @@ def pct_plot(players, s_data, title):
         x_m, y_m = x[mask], y[mask]
         plt.fill_between(x_m, y1=y_m, alpha=0.5, facecolor=current_palette[i])
         marker_offset = 0.00025
-        ax.plot(pitcher_xbpp+marker_offset, -1.5, marker='^', color=dark_palette[i])
-        plt.text(min(x), 10+i*10, "{:.3f}\nP {:.0f}".format(pitcher_xbpp, pitcher_xbpp_pct*100), color=current_palette[i], weight='bold')
+        ax.plot(pitcher_xbpp+marker_offset, -10, marker='^', color=dark_palette[i])
+        plt.text(min(x), 20+i*40, "{:.3f}\nP {:.0f}".format(pitcher_xbpp, pitcher_xbpp_pct*100), color=current_palette[i], weight='bold')
     #SHIFT AFTER
     ax.set_xlim(ax.get_xlim()[::-1])
     #remove stuff
-    ax.set_yticks((1, 6))
+    ax.set_yticks((1, 20))
+    ax.set_aspect(0.0001)
+    print(ax.get_aspect())
     ax.set_yticklabels(("{:.3f}".format(max(x)), 'xBPP'), fontweight='bold')
     ax.tick_params(axis='y', direction='in', pad=0, length=0, width=0, labelcolor='gray')
     ax2 = ax.twinx()
     ax2.tick_params(axis='y', direction='in', pad=0, length=0, width=0, labelcolor='gray')
-    ax2.set_yticks([0.1])
+    ax2.set_yticks([0.47])
     ax2.set_yticklabels("{:.3f}".format(min(x)), fontweight='bold')
     ax.set_xticklabels([])
     ax.set_xticks([])
