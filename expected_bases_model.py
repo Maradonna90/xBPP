@@ -45,11 +45,11 @@ def main():
     chunksize = 10 ** 6
     cols = pd.read_csv("pitches.csv", nrows=1).columns
     #print(cols)
-    for chunk in pd.read_csv("pitches.csv", chunksize=chunksize):
+    for i, chunk in enumerate(pd.read_csv("pitches.csv", chunksize=chunksize)):
         #data = data.drop([4943598])
         chunk.columns = cols
-        process_data(chunk, events_conv, filter_events, filter_cols)
-def process_data(data, events_conv, filter_events, filter_cols):
+        process_data(chunk, events_conv, filter_events, filter_cols, i)
+def process_data(data, events_conv, filter_events, filter_cols, num):
     print(data.shape)
     data = data.drop(data[data['events'].isin(filter_events)].index)
     #print(data.shape)
@@ -65,7 +65,7 @@ def process_data(data, events_conv, filter_events, filter_cols):
     #data = data.dropna()
     print(data.shape)
     data[filter_cols[:-3]] = data[filter_cols[:-3]].apply(pd.to_numeric)
-    data.to_hdf('pitches.h5', key='data', mode='a')
+    data.to_hdf('pitches.h5', key='data'+str(num), mode='a')
     #print(data.describe())
 
 if __name__ == "__main__":

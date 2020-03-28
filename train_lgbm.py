@@ -8,42 +8,54 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from joblib import dump, load
-#LOAD DATA
-data = pd.read_hdf('pitches.h5', 'data')
+from math import sqrt
 
-#SPLIT DATAFRAME IN X AND Y
-X = data.iloc[:, 0:-1].values
-y = data.iloc[:, -1].values
+def rmse(y_actual, y_predicted):
+    #print(y_actual, y_predicted)
+    return sqrt(mean_squared_error(y_actual, y_predicted))
 
-# SPLIT INTO TRAIN AND VAL SET
-x_train, x_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
+def train(model, x_train, y_train, x_test, y_test, name):
+    clf = make_pipeline(StandardScaler(), model)
+    scorer = make_scorer(rmse, greater_is_better=False)
+    scores = cross_val_score(clf, x_train, y_train, cv=5, scoring=scorer)
+    print("train_avg_score:", np.mean(scores))
+    clf.fit(x_train, y_train)
+    predict = clf.predict(x_test)
+    scores = rmse(y_test, predict)
+    #print("x_test:", x_test[20:30])
+    #print("y_test:", y_test[20:30])
+    #print("predict:", predict[20:30])
+    print("test_avg_score:", np.mean(scores))
 
-#SCALE FEATURES AND TARGET
-sc = StandardScaler()
-x_train = sc.fit_transform(x_train)
-x_test = sc.transform(x_test)
+    #FEATURE IMPORTANCE
+    #feature_imp = pd.DataFrame(sorted(zip(lgbm.feature_importances_, data.iloc[:, 0: -1].columns)), columns=['Value','Feature'])
+    #plt.figure(figsize=(20, 10))
+    #sns.barplot(x="Value", y="Feature", data=feature_imp.sort_values(by="Value", ascending=False))
+    #plt.title('LightGBM Features (avg over folds)')
+    #plt.tight_layout()
+    #plt.show()
+    #plt.savefig('lgbm_importances-02.png')
 
-#BUILD MODEL
-lgbm = lgb.LGBMRegressor()
-clf = make_pipeline(StandardScaler(), lgbm)
-scorer = make_scorer(mean_squared_error, greater_is_better=False)
-scores = cross_val_score(clf, x_train, y_train, cv=5, scoring=scorer)
-print("train_avg_score:", np.mean(scores))
-clf.fit(x_train, y_train)
-predict = clf.predict(x_test)
-scores = mean_squared_error(y_test, predict)
-#print("x_test:", x_test[20:30])
-#print("y_test:", y_test[20:30])
-#print("predict:", predict[20:30])
-print("test_avg_score:", np.mean(scores))
+    #dump(lgbm, 'lgbm-'+name+'.joblib')
 
-#FEATURE IMPORTANCE
-feature_imp = pd.DataFrame(sorted(zip(lgbm.feature_importances_, data.iloc[:, 0: -1].columns)), columns=['Value','Feature'])
-plt.figure(figsize=(20, 10))
-sns.barplot(x="Value", y="Feature", data=feature_imp.sort_values(by="Value", ascending=False))
-plt.title('LightGBM Features (avg over folds)')
-plt.tight_layout()
-#plt.show()
-plt.savefig('lgbm_importances-01.png')
+def main():
+    data_columns = ['release_speed', 'release_pos_x', 'release_pos_z', 'pfx_x', 'pfx_z', 'plate_x', 'plate_z', 'release_spin_rate', 'bases']
+    data = pd.read_csv('full_xBPP.csv', usecols=data_columns, header=0)
+    #SPLIT DATAFRAME IN X AND Y
+    X = data.iloc[:, 0:-1].values
+    y = data.iloc[:, -1].values
 
-dump(lgbm, 'lgbm.joblib')
+    # SPLIT INTO TRAIN AND VAL SET
+    x_train, x_test, y_train, y_test = train_test_split(X, y, test_size = 0.25, random_state = 0)
+
+    #SCALE FEATURES AND TARGET
+    sc = StandardScaler()
+    x_train = sc.fit_transform(x_train)
+    x_test = sc.transform(x_test)
+
+    #BUILD MODEL
+    lgbm = lgb.LGBMRegressor()
+    train(lgbm, x_train, y_train, x_test, y_test, "lgbm-vanilla")
+
+if __name__ == "__main__":
+    main()
