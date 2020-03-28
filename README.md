@@ -29,6 +29,7 @@ checkout pybaseball
 * Training Direction
 * Expose Batter weaknesses (e.g., a "bad" curve ball might be better than a "good" fastball etc.)
 * xBPP vs Contact quality (how many bases for that contact) -> good contact, lucky contact? Are some batter significantly converting low xBPP pitches into higher xBPP contacts
+* are there batters who tire pitchers by getting most pitches per PA
 
 # Tuning Options
 * take pitch type into account
