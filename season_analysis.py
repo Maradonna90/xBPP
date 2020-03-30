@@ -7,7 +7,7 @@ filter_cols = ['game_date', 'player_name'] + numeric_cols
 game_year = 2019.0
 
 #TODO: load csv
-data = pd.read_csv("combined_xBPP.csv", header=0, usecols=filter_cols)
+data = pd.read_csv("results/combined_xBPP.csv", header=0, usecols=filter_cols)
 print("number of negative predicitons")
 print(data[data['xBPP'] < 0].count())
 #TODO: pitcher evaluation 2019: expected bases, base difference, xBPP difference, 

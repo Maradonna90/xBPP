@@ -48,11 +48,11 @@ def train(models, x_train, y_train, x_test, y_test, names):
 
 
 def main():
-    #data_columns = ['release_speed', 'release_pos_x', 'release_pos_z', 'release_pos_y', 'pfx_x', 'pfx_z', 'plate_x', 'plate_z', 'release_spin_rate', 'bases']
+    data_columns = ['release_speed', 'release_pos_x', 'release_pos_z', 'release_pos_y', 'pfx_x', 'pfx_z', 'plate_x', 'plate_z', 'release_spin_rate', 'bases']
     #TODO: add pitch  type
-    data_columns = ['release_speed', 'pfx_x', 'pfx_z', 'plate_x', 'plate_z', 'bases']
+    #data_columns = ['release_speed', 'pfx_x', 'pfx_z', 'plate_x', 'plate_z', 'bases']
 
-    data = pd.read_csv('data/full_xBPP.csv', usecols=data_columns, header=0)
+    data = pd.read_hdf('data/pitches.h5', columns=data_columns)
     print(data.shape)
     print(data.isna().sum())
     data = data.dropna()

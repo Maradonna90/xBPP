@@ -42,31 +42,18 @@ def main():
                    "sac_bunt_double_play" : 0,
                    "null" : -1
                   }
-    chunksize = 10 ** 6
-    cols = pd.read_csv("pitches.csv", nrows=1).columns
-    #print(cols)
-    for i, chunk in enumerate(pd.read_csv("pitches.csv", chunksize=chunksize)):
-        #data = data.drop([4943598])
-        chunk.columns = cols
-        process_data(chunk, events_conv, filter_events, filter_cols, i)
-def process_data(data, events_conv, filter_events, filter_cols, num):
+    data = pd.read_csv("pitches.csv")
     print(data.shape)
     data = data.drop(data[data['events'].isin(filter_events)].index)
-    #print(data.shape)
-    #data = data['events'].map({np.nan: 'null'})
     data['events'] = data['events'].fillna('null')
     data['bases'] = -1
     data['bases'] = data['events'].map(events_conv)
     data.loc[(data['events'] == 'null') & (data['type'] == 'B') ,'bases'] = 0.25
     data.loc[(data['events'] == 'null') & (data['type'] == 'S') ,'bases'] = 0
-    #print(data.isna().sum())
-    #print(data.shape)
     data = data.drop(['events', 'type'], axis=1)
-    #data = data.dropna()
     data[filter_cols[:-3]] = data[filter_cols[:-3]].apply(pd.to_numeric)
     print(data.shape)
-    data.to_hdf('pitches.h5', key='data'+str(num), mode='a')
-    #print(data.describe())
+    data.to_hdf('pitches.h5', key='data', mode='w')
 
 if __name__ == "__main__":
     main()
