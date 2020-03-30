@@ -1,7 +1,4 @@
-transform to xBPP to xBP/100P
-create hdf5 file
 evaluate player by season performance
-evaluate teams by season performance
 
 pitches : number of occurences
 player : player_name

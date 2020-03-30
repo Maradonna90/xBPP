@@ -17,12 +17,16 @@ def rmse(y_actual, y_predicted):
 def train(x_train, y_train, x_test, y_test, name):
     dtrain = lgb.Dataset(x_train, label=y_train)
     dval = lgb.Dataset(x_test, label=y_test)
-
+    #TODO: for better accuracy
+        #TODO: large max_bin, small lr with large num_iterations, boosting: dart
+    #TODO: avoid overfitting
+        #TODO: small max_bin, use min_data_in_leaf and min_sum_hessian_in_leaf, min_gain_to_split, max_depth, extra_trees
     params = {
         "objective": "regression",
-        "metric": "l2",
+        "metric": "rmse",
         "verbosity": -1,
         "boosting_type": "gbdt",
+        "max_bin" : 512
     }
 
     best_params, tuning_history = dict(), list()
@@ -66,8 +70,9 @@ def train(x_train, y_train, x_test, y_test, name):
 
 def main():
     #JUST GET FEATURE COLS (incl. pitch_type)
-    data_columns = ['release_speed', 'release_pos_x', 'release_pos_z', 'pfx_x', 'pfx_z', 'plate_x', 'plate_z', 'release_spin_rate', 'bases']
+    data_columns = ['release_speed', 'release_pos_x', 'release_pos_z', 'release_pos_y', 'pfx_x', 'pfx_z', 'plate_x', 'plate_z', 'release_spin_rate', 'bases']
     data = pd.read_csv('full_xBPP.csv', usecols=data_columns, header=0)
+    data = data.dropna()
     #SPLIT DATAFRAME IN X AND Y
     X = data.iloc[:, 0:-1].values
     y = data.iloc[:, -1].values

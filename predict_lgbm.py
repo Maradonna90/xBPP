@@ -10,13 +10,17 @@ store.close()
 lgbm = load('lgbm.joblib')
 data_columns = ['release_speed', 'release_pos_x', 'release_pos_z', 'pfx_x', 'pfx_z', 'plate_x', 'plate_z', 'release_spin_rate']
 for key in store_keys:
-    if key == 'data0':
-        data = pd.read_hdf('pitches.h5', key)
-    else:
-        data = pd.read_hdf('pitches.h5', key, start=1)
+    print(key)
+    #if key == '/data0':
+    data = pd.read_hdf('pitches.h5', key)
+    #else:
+    #    data = pd.read_hdf('pitches.h5', key, start=2)
     X = data.loc[:, data_columns].values
     sc = StandardScaler()
     x = sc.fit_transform(X)
     prediction = lgbm.predict(x)
     data.loc[:, 'xBPP'] = prediction
-    data.to_csv("full_xBPP.csv", index=False, mode='a')
+    if key == '/data0':
+        data.to_csv("full_xBPP.csv", index=False, mode='a')
+    else:
+         data.to_csv("full_xBPP.csv", index=False, mode='a', header=False)

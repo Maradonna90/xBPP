@@ -63,8 +63,8 @@ def process_data(data, events_conv, filter_events, filter_cols, num):
     #print(data.shape)
     data = data.drop(['events', 'type'], axis=1)
     #data = data.dropna()
-    print(data.shape)
     data[filter_cols[:-3]] = data[filter_cols[:-3]].apply(pd.to_numeric)
+    print(data.shape)
     data.to_hdf('pitches.h5', key='data'+str(num), mode='a')
     #print(data.describe())
 

@@ -4,4 +4,6 @@
 *.pdf
 *.png
 *.ods
+baseball/
+catboost_info
 
