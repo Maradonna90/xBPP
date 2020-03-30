@@ -6,14 +6,10 @@ season : game_year
 teams : hard to identify
 
 #TODO (make Issues)
-* establish evaluation suite
-  * correlation of XBPP with actual BPP
-	* RMSE on every pitch
-  * RMSE on seasonal (xBPP * Pitches vs Bases)
 * best vs worst pitch for 2019
 * try to take pitching type into account
 * use GANs to fill missing data
-
+* optimize weights for combined predictions
 
 
 #plotting
@@ -32,3 +28,6 @@ checkout pybaseball
 * take pitch type into account
 * use GANs to fill missing data
 
+#other ideas
+* P/PA for batters. To see how much they drain pitchers (follow up for SP/RP sustain curves)
+* 
