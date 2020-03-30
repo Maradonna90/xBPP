@@ -1,3 +1,10 @@
+# Usage
+1. Parser for getting the data
+2. Preprocessing to create 'bases'
+3. train_boosting to train models
+4. predct_boosting to predict xBPP
+5. seasonal_analysis for analysis
+
 evaluate player by season performance
 
 pitches : number of occurences
@@ -5,17 +12,11 @@ player : player_name
 season : game_year
 teams : hard to identify
 
-#TODO (make Issues)
+# TODO (make Issues)
 * best vs worst pitch for 2019
 * try to take pitching type into account
 * use GANs to fill missing data
 * optimize weights for combined predictions
-
-
-#plotting
-statsbomb plot: https://i1.wp.com/statsbomb.com/wp-content/uploads/2020/02/Roberto-Firmino-Premier-League-2019_2020.png?resize=1024%2C774&ssl=1
-
-checkout pybaseball
 
 #use cases for xBPP
 * Decision aid to when hook Pitchers
